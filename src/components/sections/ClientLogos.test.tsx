@@ -1,7 +1,20 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import ClientLogos from '@/components/sections/ClientLogos';
 
+const mockAnimationFrame = (cb: FrameRequestCallback) => {
+  return setTimeout(cb, 0) as unknown as number;
+};
+
 describe('ClientLogos', () => {
+  beforeEach(() => {
+    vi.stubGlobal('requestAnimationFrame', mockAnimationFrame);
+    vi.stubGlobal('cancelAnimationFrame', (id: number) => clearTimeout(id));
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('renders the section with correct aria-label', () => {
     render(<ClientLogos />);
     const section = document.querySelector('section[aria-label="Our clients"]');
@@ -10,7 +23,6 @@ describe('ClientLogos', () => {
 
   it('renders all client names (at least once each)', () => {
     render(<ClientLogos />);
-    // Since names are duplicated for seamless scroll, use getAllByText
     expect(screen.getAllByText('Meridian Foods').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('Atlas Pharma').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('Kite Retail').length).toBeGreaterThanOrEqual(1);
@@ -26,7 +38,6 @@ describe('ClientLogos', () => {
   it('renders client names twice for seamless scrolling', () => {
     render(<ClientLogos />);
     const allMeridian = document.querySelectorAll('[class*="text-slate-300"]');
-    // There should be 10 spans (5 clients * 2)
     expect(allMeridian.length).toBeGreaterThanOrEqual(5);
   });
 
@@ -46,5 +57,34 @@ describe('ClientLogos', () => {
     render(<ClientLogos />);
     const transformEl = document.querySelector('[style*="transform"]');
     expect(transformEl).toBeInTheDocument();
+  });
+
+  it('applies transition class on hover for client names', () => {
+    render(<ClientLogos />);
+    const clientSpans = document.querySelectorAll('[class*="text-slate-300"]');
+    clientSpans.forEach((span) => {
+      expect(span).toHaveClass('transition-colors');
+    });
+  });
+
+  it('renders exactly 5 unique client names', () => {
+    render(<ClientLogos />);
+    const uniqueNames = new Set<string>();
+    document.querySelectorAll('[class*="text-slate-300"]').forEach((span) => {
+      if (span.textContent) uniqueNames.add(span.textContent);
+    });
+    expect(uniqueNames.size).toBe(5);
+  });
+
+  it('container has flex class', () => {
+    render(<ClientLogos />);
+    const container = document.querySelector('[style*="transform"]');
+    expect(container).toHaveClass('flex');
+  });
+
+  it('items are centered in container', () => {
+    render(<ClientLogos />);
+    const container = document.querySelector('[style*="transform"]');
+    expect(container).toHaveClass('items-center');
   });
 });

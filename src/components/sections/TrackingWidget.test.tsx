@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import TrackingWidget from '@/components/sections/TrackingWidget';
 
 describe('TrackingWidget', () => {
@@ -65,7 +65,6 @@ describe('TrackingWidget', () => {
     const btn = screen.getByRole('button', { name: /Track/i });
     fireEvent.change(input, { target: { value: 'NX-123456' } });
     fireEvent.click(btn);
-    // Should show loading state
     expect(screen.getByLabelText(/Loading tracking information/i)).toBeInTheDocument();
   });
 
@@ -140,7 +139,6 @@ describe('TrackingWidget', () => {
     fireEvent.change(input, { target: { value: '  NX-123456  ' } });
     fireEvent.click(btn);
 
-    // Should pass validation after trimming
     expect(screen.getByLabelText(/Loading tracking information/i)).toBeInTheDocument();
   });
 
@@ -149,12 +147,10 @@ describe('TrackingWidget', () => {
     const input = screen.getByLabelText('Tracking ID');
     const btn = screen.getByRole('button', { name: /Track/i });
 
-    // Submit with spaces only (invalid)
     fireEvent.change(input, { target: { value: '   ' } });
     fireEvent.click(btn);
     expect(screen.getByRole('alert')).toBeInTheDocument();
 
-    // Clear error by typing valid input
     fireEvent.change(input, { target: { value: 'NX-123456' } });
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
@@ -163,5 +159,90 @@ describe('TrackingWidget', () => {
     render(<TrackingWidget />);
     const form = document.querySelector('form');
     expect(form).toHaveAttribute('noValidate');
+  });
+
+  it('displays tracking result after loading completes', async () => {
+    render(<TrackingWidget />);
+    const input = screen.getByLabelText('Tracking ID');
+    const btn = screen.getByRole('button', { name: /Track/i });
+    fireEvent.change(input, { target: { value: 'NX-123456' } });
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+      expect(screen.getByText('NX-123456')).toBeInTheDocument();
+    }, { timeout: 2000 });
+  });
+
+  it('shows progress bar with correct number of segments', async () => {
+    render(<TrackingWidget />);
+    const input = screen.getByLabelText('Tracking ID');
+    const btn = screen.getByRole('button', { name: /Track/i });
+    fireEvent.change(input, { target: { value: 'NX-123456' } });
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+      const progressSegments = document.querySelectorAll('[role="progressbar"] > div > div');
+      expect(progressSegments).toHaveLength(5);
+    }, { timeout: 2000 });
+  });
+
+  it('shows all 5 timeline status entries after loading', async () => {
+    render(<TrackingWidget />);
+    const input = screen.getByLabelText('Tracking ID');
+    const btn = screen.getByRole('button', { name: /Track/i });
+    fireEvent.change(input, { target: { value: 'NX-123456' } });
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+      expect(screen.getByText('Booked')).toBeInTheDocument();
+      expect(screen.getByText('Delivered')).toBeInTheDocument();
+    }, { timeout: 2000 });
+  });
+
+  it('shows LIVE indicator for current status', async () => {
+    render(<TrackingWidget />);
+    const input = screen.getByLabelText('Tracking ID');
+    const btn = screen.getByRole('button', { name: /Track/i });
+    fireEvent.change(input, { target: { value: 'NX-123456' } });
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+      expect(screen.getByText('LIVE')).toBeInTheDocument();
+    }, { timeout: 2000 });
+  });
+
+  it('resets state when tracking a new ID after previous search', async () => {
+    render(<TrackingWidget />);
+    const input = screen.getByLabelText('Tracking ID');
+    const btn = screen.getByRole('button', { name: /Track/i });
+
+    fireEvent.change(input, { target: { value: 'NX-123456' } });
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+      expect(screen.getByText('NX-123456')).toBeInTheDocument();
+    }, { timeout: 2000 });
+
+    fireEvent.change(input, { target: { value: 'NX-654321' } });
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+      expect(screen.getByText('NX-654321')).toBeInTheDocument();
+    }, { timeout: 2000 });
+  });
+
+  it('sets aria attributes on progressbar element', async () => {
+    render(<TrackingWidget />);
+    const input = screen.getByLabelText('Tracking ID');
+    const btn = screen.getByRole('button', { name: /Track/i });
+    fireEvent.change(input, { target: { value: 'NX-123456' } });
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+      const progressbar = document.querySelector('[role="progressbar"]');
+      expect(progressbar).toHaveAttribute('aria-valuenow');
+      expect(progressbar).toHaveAttribute('aria-valuemin', '0');
+      expect(progressbar).toHaveAttribute('aria-valuemax', '4');
+    }, { timeout: 2000 });
   });
 });

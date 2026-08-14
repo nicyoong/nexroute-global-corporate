@@ -63,7 +63,6 @@ describe('ServicesPage', () => {
     const breadcrumb = document.querySelector('nav[aria-label="Breadcrumb"]');
     expect(breadcrumb).toBeInTheDocument();
     expect(screen.getByText('Home')).toBeInTheDocument();
-    // Services appears multiple times, just verify at least one exists
     expect(screen.getAllByText('Services').length).toBeGreaterThan(0);
   });
 
@@ -73,20 +72,21 @@ describe('ServicesPage', () => {
     expect(main).toBeInTheDocument();
   });
 
-  it('renders TopBar and Navbar', () => {
-    render(<ServicesPage />);
-    expect(screen.getAllByText('+1 (800) 555-ROUTE').length).toBeGreaterThan(0);
-    expect(screen.getByRole('link', { name: 'Services' })).toBeInTheDocument();
-  });
-
-  it('renders Footer', () => {
-    render(<ServicesPage />);
-    expect(screen.getByText('NexRoute Global Inc.')).toBeInTheDocument();
-  });
-
   it('renders all service descriptions', () => {
     render(<ServicesPage />);
     expect(screen.getByText(/Full-container, less-than-container, and air charter/i)).toBeInTheDocument();
     expect(screen.getByText(/Strategic warehouse space with pick, pack, ship/i)).toBeInTheDocument();
+  });
+
+  it('renders "Learn more" links for all services', () => {
+    render(<ServicesPage />);
+    const learnMoreLinks = screen.getAllByRole('link', { name: /Learn more/ });
+    expect(learnMoreLinks).toHaveLength(6);
+  });
+
+  it('renders each service card', () => {
+    render(<ServicesPage />);
+    const cards = document.querySelectorAll('[class*="rounded-xl"]');
+    expect(cards).toHaveLength(6);
   });
 });

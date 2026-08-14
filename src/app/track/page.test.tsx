@@ -48,15 +48,4 @@ describe('TrackPage', () => {
     expect(screen.getByText(/refreshed every 15 minutes/i)).toBeInTheDocument();
     expect(screen.getByText(/Proactive alerts sent for delays/i)).toBeInTheDocument();
   });
-
-  it('renders TopBar and Navbar', () => {
-    render(<TrackPage />);
-    expect(screen.getAllByText('+1 (800) 555-ROUTE').length).toBeGreaterThan(0);
-    expect(screen.getByRole('link', { name: 'Services' })).toBeInTheDocument();
-  });
-
-  it('renders Footer', () => {
-    render(<TrackPage />);
-    expect(screen.getByText('NexRoute Global Inc.')).toBeInTheDocument();
-  });
 });

@@ -1,6 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import RootLayout from '@/app/layout';
 
+vi.mock('next/font/google', () => ({
+  Inter: () => ({ className: 'inter', variable: '--font-inter' }),
+  Sora: () => ({ className: 'sora', variable: '--font-sora' }),
+}));
+
 describe('RootLayout', () => {
   it('renders children', () => {
     render(<RootLayout><main>Main Content</main></RootLayout>);
@@ -45,5 +50,35 @@ describe('RootLayout', () => {
     const themeColor = document.querySelector('meta[name="theme-color"]');
     expect(themeColor).toBeInTheDocument();
     expect(themeColor).toHaveAttribute('content', '#0B1F3A');
+  });
+
+  it('renders structured data (JSON-LD)', () => {
+    render(<RootLayout><div>Content</div></RootLayout>);
+    const jsonLd = document.querySelector('script[type="application/ld+json"]');
+    expect(jsonLd).toBeInTheDocument();
+    expect(jsonLd?.textContent).toContain('Organization');
+  });
+
+  it('wraps children in main with id="main-content"', () => {
+    render(<RootLayout><div>Inner Content</div></RootLayout>);
+    const main = document.querySelector('main');
+    expect(main).toHaveAttribute('id', 'main-content');
+    expect(screen.getByText('Inner Content')).toBeInTheDocument();
+  });
+
+  it('renders TopBar', () => {
+    render(<RootLayout><div>Children</div></RootLayout>);
+    expect(screen.getByText(/Serving 40\+ countries/i)).toBeInTheDocument();
+  });
+
+  it('renders Navbar', () => {
+    render(<RootLayout><div>Children</div></RootLayout>);
+    expect(screen.getByRole('link', { name: 'Services' })).toBeInTheDocument();
+  });
+
+  it('renders Footer', () => {
+    render(<RootLayout><div>Children</div></RootLayout>);
+    const footer = document.querySelector('footer');
+    expect(footer).toBeInTheDocument();
   });
 });

@@ -136,4 +136,27 @@ describe('Navbar', () => {
     const dialog = document.querySelector('[role="dialog"]');
     expect(dialog).toHaveAttribute('aria-modal', 'true');
   });
+
+  it('sets body overflow to hidden when mobile menu is open', async () => {
+    render(<Navbar />);
+    const toggleBtn = screen.getByRole('button', { name: /open menu/i });
+    await act(async () => {
+      toggleBtn.click();
+    });
+    expect(document.body.style.overflow).toBe('hidden');
+  });
+
+  it('restores body overflow when mobile menu is closed', async () => {
+    render(<Navbar />);
+    const toggleBtn = screen.getByRole('button', { name: /open menu/i });
+    await act(async () => {
+      toggleBtn.click();
+    });
+    expect(document.body.style.overflow).toBe('hidden');
+
+    await act(async () => {
+      toggleBtn.click();
+    });
+    expect(document.body.style.overflow).toBe('');
+  });
 });
