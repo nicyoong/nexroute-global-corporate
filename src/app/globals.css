@@ -1,0 +1,98 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap');
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Sora', system-ui, sans-serif;
+
+  --color-primary: #0B1F3A;
+  --color-primary-light: #152C4F;
+  --color-primary-dark: #071525;
+  --color-primary-50: #E8EDEF;
+  --color-primary-100: #D0D9E3;
+  --color-primary-600: #475569;
+  --color-primary-700: #334155;
+  --color-primary-800: #1E293B;
+  --color-primary-900: #0F172A;
+
+  --color-accent: #F97316;
+  --color-accent-light: #FB923C;
+  --color-accent-dark: #EA580C;
+  --color-accent-50: #FFF7ED;
+  --color-accent-100: #FFEDD5;
+
+  --color-surface: #F8FAFC;
+  --color-surface-alt: #F1F5F9;
+
+  --shadow-soft: 0 2px 8px rgba(11, 31, 58, 0.06);
+  --shadow-medium: 0 4px 20px rgba(11, 31, 58, 0.1);
+  --shadow-large: 0 8px 40px rgba(11, 31, 58, 0.12);
+  --shadow-accent: 0 4px 14px rgba(249, 115, 22, 0.35);
+}
+
+/* ============================================
+   Global Styles & Accessibility
+============================================ */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-inter);
+  background-color: #F8FAFC;
+  color: #0F172A;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Skip to content link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 200;
+  padding: 0.75rem 1.5rem;
+  background: #0B1F3A;
+  color: #F8FAFC;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid #F97316;
+  outline-offset: 2px;
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid #F97316;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Selection color */
+::selection {
+  background-color: rgba(249, 115, 22, 0.2);
+  color: #0B1F3A;
+}
