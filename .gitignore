@@ -6,9 +6,6 @@
 
 # testing
 /coverage
-/test-output.txt
-/coverage-output.txt
-/coverage-run.txt
 
 # next.js
 /.next/
