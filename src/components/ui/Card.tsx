@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 interface CardProps {
   children: ReactNode;
@@ -10,13 +10,13 @@ interface CardProps {
 
 export default function Card({
   children,
-  className = '',
+  className = "",
   href,
   onClick,
   ariaLabel,
 }: CardProps) {
   const baseClasses =
-    'bg-white rounded-xl shadow-soft hover:shadow-medium transition-shadow duration-300 overflow-hidden';
+    "bg-white rounded-xl shadow-soft hover:shadow-medium transition-shadow duration-300 overflow-hidden";
 
   const classes = `${baseClasses} ${className}`;
 

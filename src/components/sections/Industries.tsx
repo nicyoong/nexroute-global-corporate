@@ -1,3 +1,8 @@
+"use client";
+
+import { motion } from "framer-motion";
+import SectionHeading from "../ui/SectionHeading";
+
 const industries = [
   {
     title: "Manufacturing",
@@ -41,6 +46,19 @@ const industries = [
   },
 ];
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0 },
+};
+
 export default function Industries() {
   return (
     <section className="py-20 md:py-28 bg-surface" aria-labelledby="industries-heading">
@@ -61,10 +79,17 @@ export default function Industries() {
             supply chain demands.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
           {industries.map((industry) => (
-            <div
+            <motion.div
               key={industry.title}
+              variants={item}
               className="bg-white rounded-xl shadow-soft p-8 hover:-translate-y-1 hover:shadow-medium transition-all duration-300"
             >
               <div className="text-accent mb-5" aria-hidden="true">
@@ -76,9 +101,9 @@ export default function Industries() {
               <p className="text-primary-600 text-base leading-relaxed">
                 {industry.description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

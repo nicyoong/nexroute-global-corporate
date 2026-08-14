@@ -1,12 +1,6 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap');
-
-@custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Sora', system-ui, sans-serif;
-
   --color-primary: #0B1F3A;
   --color-primary-light: #152C4F;
   --color-primary-dark: #071525;
@@ -16,70 +10,46 @@
   --color-primary-700: #334155;
   --color-primary-800: #1E293B;
   --color-primary-900: #0F172A;
-
   --color-accent: #F97316;
   --color-accent-light: #FB923C;
   --color-accent-dark: #EA580C;
   --color-accent-50: #FFF7ED;
   --color-accent-100: #FFEDD5;
-
   --color-surface: #F8FAFC;
   --color-surface-alt: #F1F5F9;
-
+  --color-slate-50: #F8FAFC;
+  --color-slate-100: #F1F5F9;
+  --color-slate-200: #E2E8F0;
+  --color-slate-300: #CBD5E1;
+  --color-slate-400: #94A3B8;
+  --color-slate-500: #64748B;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1E293B;
+  --color-slate-900: #0F172A;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-sora), system-ui, sans-serif;
   --shadow-soft: 0 2px 8px rgba(11, 31, 58, 0.06);
   --shadow-medium: 0 4px 20px rgba(11, 31, 58, 0.1);
   --shadow-large: 0 8px 40px rgba(11, 31, 58, 0.12);
   --shadow-accent: 0 4px 14px rgba(249, 115, 22, 0.35);
 }
 
-/* ============================================
-   Global Styles & Accessibility
-============================================ */
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: var(--font-inter);
-  background-color: #F8FAFC;
-  color: #0F172A;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Skip to content link for accessibility */
+/* Accessibility: skip link */
 .skip-link {
-  position: absolute;
-  top: -100%;
-  left: 0;
-  z-index: 200;
-  padding: 0.75rem 1.5rem;
-  background: #0B1F3A;
-  color: #F8FAFC;
-  font-weight: 600;
-  text-decoration: none;
-  transition: top 0.2s ease;
+  @apply sr-only absolute top-0 left-0 z-[9999] px-4 py-2 bg-accent text-white font-semibold;
 }
 
 .skip-link:focus {
-  top: 0;
-  outline: 3px solid #F97316;
-  outline-offset: 2px;
+  @apply not-sr-only focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
 }
 
-/* Focus visible for keyboard navigation */
-*:focus-visible {
-  outline: 3px solid #F97316;
-  outline-offset: 2px;
-  border-radius: 4px;
+/* Global focus-visible */
+:focus-visible {
+  @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-white rounded;
 }
 
-/* Reduced motion preference */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -87,12 +57,10 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }
 
-/* Selection color */
-::selection {
-  background-color: rgba(249, 115, 22, 0.2);
-  color: #0B1F3A;
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
 }

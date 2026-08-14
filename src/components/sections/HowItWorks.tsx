@@ -1,3 +1,7 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 const steps = [
   {
     step: "01",
@@ -21,6 +25,19 @@ const steps = [
   },
 ];
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0 },
+};
+
 export default function HowItWorks() {
   return (
     <section className="py-20 md:py-28 bg-primary" aria-labelledby="how-it-works-heading">
@@ -36,10 +53,15 @@ export default function HowItWorks() {
             From inquiry to delivery in four steps
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+        >
           {steps.map((s, i) => (
-            <div key={s.step} className="relative">
-              {/* Connector line */}
+            <motion.div key={s.step} variants={item} className="relative">
               {i < steps.length - 1 && (
                 <div
                   className="hidden lg:block absolute top-6 left-full w-full h-px bg-white/10 -mr-4"
@@ -55,9 +77,9 @@ export default function HowItWorks() {
               <p className="text-surface/60 text-sm leading-relaxed">
                 {s.description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

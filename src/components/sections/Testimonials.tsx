@@ -1,3 +1,7 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 const testimonials = [
   {
     quote:
@@ -25,6 +29,19 @@ const testimonials = [
   },
 ];
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0 },
+};
+
 export default function Testimonials() {
   return (
     <section className="py-20 md:py-28 bg-white" aria-labelledby="testimonials-heading">
@@ -40,10 +57,17 @@ export default function Testimonials() {
             Trusted by Supply Chain Leaders
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
           {testimonials.map((t, index) => (
-            <blockquote
+            <motion.blockquote
               key={index}
+              variants={item}
               className="bg-surface rounded-xl p-8 flex flex-col"
             >
               <div
@@ -73,9 +97,9 @@ export default function Testimonials() {
                   {t.title}, {t.company}
                 </div>
               </footer>
-            </blockquote>
+            </motion.blockquote>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

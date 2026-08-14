@@ -1,15 +1,17 @@
+import { ReactNode } from "react";
+
 interface ContainerProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   id?: string;
-  as?: 'section' | 'div' | 'article';
+  as?: "section" | "div" | "article";
 }
 
 export default function Container({
   children,
-  className = '',
+  className = "",
   id,
-  as: Component = 'div',
+  as: Component = "div",
 }: ContainerProps) {
   return (
     <Component
