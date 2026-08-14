@@ -1,5 +1,3 @@
-import TopBar from "@/components/layout/TopBar";
-import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import ClientLogos from "@/components/sections/ClientLogos";
 import Stats from "@/components/sections/Stats";
@@ -9,7 +7,6 @@ import HowItWorks from "@/components/sections/HowItWorks";
 import Industries from "@/components/sections/Industries";
 import Testimonials from "@/components/sections/Testimonials";
 import CTABand from "@/components/sections/CTABand";
-import Footer from "@/components/layout/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -21,8 +18,6 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <TopBar />
-      <Navbar />
       <Hero />
       <ClientLogos />
       <Stats />
@@ -32,7 +27,6 @@ export default function Home() {
       <Industries />
       <Testimonials />
       <CTABand />
-      <Footer />
     </>
   );
 }

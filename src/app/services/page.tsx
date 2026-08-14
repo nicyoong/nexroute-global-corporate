@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-import TopBar from "@/components/layout/TopBar";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Link from "next/link";
@@ -82,62 +79,57 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <>
-      <TopBar />
-      <Navbar />
-      <main id="main-content">
-        <section className="bg-primary py-16 md:py-24">
-          <Container>
-            <nav aria-label="Breadcrumb" className="mb-6">
-              <ol className="flex items-center gap-2 text-sm text-surface/60">
-                <li><a href="/" className="hover:text-white transition-colors">Home</a></li>
-                <li aria-hidden="true">/</li>
-                <li className="text-white" aria-current="page">Services</li>
-              </ol>
-            </nav>
-            <h1 className="font-display font-bold text-3xl md:text-5xl text-white mb-4">
-              Our Services
-            </h1>
-            <p className="text-surface/80 text-lg md:text-xl max-w-3xl leading-relaxed">
-              Comprehensive logistics solutions designed for the complexities of
-              modern supply chains. Every service integrates with our 24/7
-              control tower for real-time visibility.
-            </p>
-          </Container>
-        </section>
+    <main id="main-content">
+      <section className="bg-primary py-16 md:py-24">
+        <Container>
+          <nav aria-label="Breadcrumb" className="mb-6">
+            <ol className="flex items-center gap-2 text-sm text-surface/60">
+              <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
+              <li aria-hidden="true">/</li>
+              <li className="text-white" aria-current="page">Services</li>
+            </ol>
+          </nav>
+          <h1 className="font-display font-bold text-3xl md:text-5xl text-white mb-4">
+            Our Services
+          </h1>
+          <p className="text-surface/80 text-lg md:text-xl max-w-3xl leading-relaxed">
+            Comprehensive logistics solutions designed for the complexities of
+            modern supply chains. Every service integrates with our 24/7
+            control tower for real-time visibility.
+          </p>
+        </Container>
+      </section>
 
-        <section className="py-20 md:py-28 bg-surface">
-          <Container>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.map((service) => (
-                <Link
-                  key={service.slug}
-                  href={`/services/${service.slug}`}
-                  className="bg-white rounded-xl shadow-soft p-6 flex flex-col hover:-translate-y-1 hover:shadow-medium transition-all duration-300 group"
-                  aria-label={`Learn more about ${service.title}`}
-                >
-                  <div className="text-accent mb-4 group-hover:scale-110 transition-transform" aria-hidden="true">
-                    {service.icon}
-                  </div>
-                  <h2 className="font-display font-semibold text-xl text-primary mb-3">
-                    {service.title}
-                  </h2>
-                  <p className="text-primary-600 text-base leading-relaxed flex-grow">
-                    {service.description}
-                  </p>
-                  <span className="mt-4 inline-flex items-center text-accent font-medium text-sm group-hover:gap-2 transition-all">
-                    Learn more
-                    <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </Container>
-        </section>
-      </main>
-      <Footer />
-    </>
+      <section className="py-20 md:py-28 bg-surface">
+        <Container>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((service) => (
+              <Link
+                key={service.slug}
+                href={`/services/${service.slug}`}
+                className="bg-white rounded-xl shadow-soft p-6 flex flex-col hover:-translate-y-1 hover:shadow-medium transition-all duration-300 group"
+                aria-label={`Learn more about ${service.title}`}
+              >
+                <div className="text-accent mb-4 group-hover:scale-110 transition-transform" aria-hidden="true">
+                  {service.icon}
+                </div>
+                <h2 className="font-display font-semibold text-xl text-primary mb-3">
+                  {service.title}
+                </h2>
+                <p className="text-primary-600 text-base leading-relaxed flex-grow">
+                  {service.description}
+                </p>
+                <span className="mt-4 inline-flex items-center text-accent font-medium text-sm group-hover:gap-2 transition-all">
+                  Learn more
+                  <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </Container>
+      </section>
+    </main>
   );
 }
