@@ -1,11 +1,14 @@
 import TopBar from '@/components/layout/TopBar';
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/sections/Hero';
-import Services from '@/components/sections/Services';
+import ClientLogos from '@/components/sections/ClientLogos';
 import Stats from '@/components/sections/Stats';
+import Services from '@/components/sections/Services';
+import GlobalNetwork from '@/components/sections/GlobalNetwork';
+import HowItWorks from '@/components/sections/HowItWorks';
 import Industries from '@/components/sections/Industries';
 import Testimonials from '@/components/sections/Testimonials';
-import CTA from '@/components/sections/CTA';
+import CTABand from '@/components/sections/CTABand';
 import Footer from '@/components/layout/Footer';
 
 export default function Home() {
@@ -14,11 +17,14 @@ export default function Home() {
       <TopBar />
       <Navbar />
       <Hero />
-      <Services />
+      <ClientLogos />
       <Stats />
+      <Services />
+      <GlobalNetwork />
+      <HowItWorks />
       <Industries />
       <Testimonials />
-      <CTA />
+      <CTABand />
       <Footer />
     </>
   );
