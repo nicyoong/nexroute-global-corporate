@@ -6,7 +6,7 @@ describe('Hero', () => {
     render(<Hero />);
     const heading = screen.getByRole('heading', { level: 1 });
     expect(heading).toBeInTheDocument();
-    expect(heading).toHaveTextContent(/Moving the World Forward/i);
+    expect(heading).toHaveTextContent(/Freight that moves at the speed of your business/i);
   });
 
   it('has correct aria-labelledby', () => {
@@ -17,41 +17,41 @@ describe('Hero', () => {
 
   it('renders the trusted badge', () => {
     render(<Hero />);
-    expect(screen.getByText(/Trusted by 2,400\+ enterprises worldwide/i)).toBeInTheDocument();
+    // The text is split across span/strong elements, query by individual parts
+    expect(screen.getByText(/300\+ enterprises/i)).toBeInTheDocument();
+    expect(screen.getByText(/worldwide/i)).toBeInTheDocument();
   });
 
   it('renders the description paragraph', () => {
     render(<Hero />);
-    expect(screen.getByText(/NexRoute Global delivers integrated supply chain/i)).toBeInTheDocument();
+    expect(screen.getByText(/NexRoute Global connects 40\+ countries/i)).toBeInTheDocument();
   });
 
-  it('renders Request a Custom Quote button', () => {
+  it('renders Get a Quote button', () => {
     render(<Hero />);
-    expect(screen.getByRole('link', { name: /Request a Custom Quote/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Get a Quote/i })).toBeInTheDocument();
   });
 
-  it('renders Explore Our Services button', () => {
+  it('renders Track Shipment button', () => {
     render(<Hero />);
-    expect(screen.getByRole('link', { name: /Explore Our Services/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Track Shipment/i })).toBeInTheDocument();
   });
 
-  it('links to /contact for Request a Custom Quote', () => {
+  it('links Get a Quote to /contact', () => {
     render(<Hero />);
-    const requestBtn = screen.getByRole('link', { name: /Request a Custom Quote/i });
+    const requestBtn = screen.getByRole('link', { name: /Get a Quote/i });
     expect(requestBtn).toHaveAttribute('href', '/contact');
   });
 
-  it('links to /services for Explore Our Services', () => {
+  it('links Track Shipment to /track', () => {
     render(<Hero />);
-    const exploreBtn = screen.getByRole('link', { name: /Explore Our Services/i });
-    expect(exploreBtn).toHaveAttribute('href', '/services');
+    const trackBtn = screen.getByRole('link', { name: /Track Shipment/i });
+    expect(trackBtn).toHaveAttribute('href', '/track');
   });
 
-  it('renders certification badges', () => {
+  it('renders the End-to-End Supply Chain Solutions eyebrow', () => {
     render(<Hero />);
-    expect(screen.getByText(/ISO 9001:2015 Certified/)).toBeInTheDocument();
-    expect(screen.getByText(/24\/7 Operations Center/)).toBeInTheDocument();
-    expect(screen.getByText(/120\+ Countries Served/)).toBeInTheDocument();
+    expect(screen.getByText(/End-to-End Supply Chain Solutions/i)).toBeInTheDocument();
   });
 
   it('has section with bg-primary class', () => {
@@ -60,10 +60,17 @@ describe('Hero', () => {
     expect(section).toHaveClass('bg-primary');
   });
 
-  it('renders the skip link in layout', () => {
-    // Hero doesn't render skip link, layout does - test the Hero component alone
+  it('renders SVG map on the right side', () => {
     render(<Hero />);
-    // Should not have skip-link (that's in layout)
-    expect(document.querySelector('.skip-link')).toBeNull();
+    const svg = document.querySelector('svg');
+    expect(svg).toBeInTheDocument();
+  });
+
+  it('renders the 24/7 Control Tower badge', () => {
+    render(<Hero />);
+    // Match the specific badge text (not the one in the paragraph)
+    const badge = document.querySelector('.absolute');
+    expect(badge).toBeInTheDocument();
+    expect(badge?.textContent).toContain('24/7 Control Tower');
   });
 });

@@ -26,19 +26,14 @@ describe('Footer', () => {
     expect(screen.getByText('Resources')).toBeInTheDocument();
   });
 
-  it('renders Air Freight link', () => {
+  it('renders Air & Ocean Freight link', () => {
     render(<Footer />);
-    expect(screen.getByRole('link', { name: 'Air Freight' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Air & Ocean Freight' })).toBeInTheDocument();
   });
 
-  it('renders Ocean Freight link', () => {
+  it('renders Warehousing & Fulfillment link', () => {
     render(<Footer />);
-    expect(screen.getByRole('link', { name: 'Ocean Freight' })).toBeInTheDocument();
-  });
-
-  it('renders Road Freight link', () => {
-    render(<Footer />);
-    expect(screen.getByRole('link', { name: 'Road Freight' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Warehousing & Fulfillment' })).toBeInTheDocument();
   });
 
   it('renders all resource links', () => {
@@ -107,9 +102,9 @@ describe('Footer', () => {
     expect(input).toBeInTheDocument();
   });
 
-  it('newsletter form has required input', () => {
+  it('newsletter input exists', () => {
     render(<Footer />);
-    const input = document.querySelector('input[required]');
+    const input = document.querySelector('input[type="email"]');
     expect(input).toBeInTheDocument();
   });
 

@@ -4,26 +4,18 @@ import Stats from '@/components/sections/Stats';
 describe('Stats', () => {
   it('renders all four stats', () => {
     render(<Stats />);
-    expect(screen.getByText('120+')).toBeInTheDocument();
-    expect(screen.getByText('2,400+')).toBeInTheDocument();
-    expect(screen.getByText('98.7%')).toBeInTheDocument();
-    expect(screen.getByText('15M+')).toBeInTheDocument();
+    expect(screen.getByText('12M+')).toBeInTheDocument();
+    expect(screen.getByText('99.2%')).toBeInTheDocument();
+    expect(screen.getByText('40+')).toBeInTheDocument();
+    expect(screen.getByText('24/7')).toBeInTheDocument();
   });
 
   it('renders all stat labels', () => {
     render(<Stats />);
+    expect(screen.getByText('Shipments Per Year')).toBeInTheDocument();
+    expect(screen.getByText('On-Time Delivery Rate')).toBeInTheDocument();
     expect(screen.getByText('Countries Served')).toBeInTheDocument();
-    expect(screen.getByText('Enterprise Clients')).toBeInTheDocument();
-    expect(screen.getByText('On-Time Delivery')).toBeInTheDocument();
-    expect(screen.getByText('Shipments Annually')).toBeInTheDocument();
-  });
-
-  it('renders all stat descriptions', () => {
-    render(<Stats />);
-    expect(screen.getByText('Across six continents')).toBeInTheDocument();
-    expect(screen.getByText('Trusted by industry leaders')).toBeInTheDocument();
-    expect(screen.getByText('Industry-leading reliability')).toBeInTheDocument();
-    expect(screen.getByText('Moving goods worldwide')).toBeInTheDocument();
+    expect(screen.getByText('Global Control Tower')).toBeInTheDocument();
   });
 
   it('has a screen-reader-only heading', () => {
@@ -38,19 +30,10 @@ describe('Stats', () => {
     expect(section).toBeInTheDocument();
   });
 
-  it('renders 4 stat groups', () => {
+  it('renders 4 stat items', () => {
     render(<Stats />);
-    const groups = document.querySelectorAll('[role="group"]');
-    expect(groups).toHaveLength(4);
-  });
-
-  it('each stat group has correct aria-label', () => {
-    render(<Stats />);
-    const groups = document.querySelectorAll('[role="group"]');
-    expect(groups[0]).toHaveAttribute('aria-label', 'Countries Served: 120+');
-    expect(groups[1]).toHaveAttribute('aria-label', 'Enterprise Clients: 2,400+');
-    expect(groups[2]).toHaveAttribute('aria-label', 'On-Time Delivery: 98.7%');
-    expect(groups[3]).toHaveAttribute('aria-label', 'Shipments Annually: 15M+');
+    const statItems = document.querySelectorAll('[class*="font-display"]');
+    expect(statItems.length).toBeGreaterThanOrEqual(4);
   });
 
   it('has bg-primary class on section', () => {

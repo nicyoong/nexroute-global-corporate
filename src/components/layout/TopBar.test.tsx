@@ -29,9 +29,9 @@ describe('TopBar', () => {
     expect(certText.closest('a')).toBeNull();
   });
 
-  it('renders the footer tagline', () => {
+  it('renders the tagline', () => {
     render(<TopBar />);
-    expect(screen.getByText('Serving 120+ countries · 24/7 Operations Center')).toBeInTheDocument();
+    expect(screen.getByText(/Serving 40\+ countries/i)).toBeInTheDocument();
   });
 
   it('has role="complementary"', () => {

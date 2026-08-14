@@ -9,13 +9,11 @@ describe('Home Page', () => {
 
   it('renders TopBar component content', () => {
     render(<Home />);
-    // TopBar has the ISO certification text that also appears in Footer - use the tagline
-    expect(screen.getByText('Serving 120+ countries · 24/7 Operations Center')).toBeInTheDocument();
+    expect(screen.getByText(/Serving 40\+ countries/i)).toBeInTheDocument();
   });
 
   it('renders Navbar component content', () => {
     render(<Home />);
-    // Navbar has Services nav link in the main nav
     const nav = document.querySelector('nav[aria-label="Main navigation"]');
     expect(nav?.querySelector('a[href="/services"]')).toBeInTheDocument();
   });
@@ -27,18 +25,17 @@ describe('Home Page', () => {
 
   it('renders Services component content', () => {
     render(<Home />);
-    // Services section heading
-    expect(screen.getByRole('heading', { name: /comprehensive logistics solutions/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Comprehensive Logistics Solutions/i })).toBeInTheDocument();
   });
 
   it('renders Stats component content', () => {
     render(<Home />);
-    expect(screen.getByText('120+')).toBeInTheDocument();
+    expect(screen.getByText('12M+')).toBeInTheDocument();
   });
 
   it('renders Industries component content', () => {
     render(<Home />);
-    expect(screen.getByText('Healthcare & Pharmaceuticals')).toBeInTheDocument();
+    expect(screen.getByText('Manufacturing')).toBeInTheDocument();
   });
 
   it('renders Testimonials component content', () => {
@@ -48,8 +45,7 @@ describe('Home Page', () => {
 
   it('renders CTA component content', () => {
     render(<Home />);
-    // CTA has a unique heading text
-    expect(screen.getByRole('heading', { name: /ready to optimize/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Ready to de-risk your supply chain\?/i })).toBeInTheDocument();
   });
 
   it('renders Footer component content', () => {

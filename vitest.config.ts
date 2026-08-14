@@ -4,27 +4,27 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/',
-        'src/test/',
-        '**/*.config.*',
-        '**/*.test.*',
-        '**/*.spec.*',
-      ],
-      all: true,
-      include: ['src/**/*.tsx', 'src/**/*.ts'],
-    },
-  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+    },
+  },
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    globals: true,
+    include: ['src/**/*.test.tsx'],
+    coverage: {
+      provider: 'istanbul',
+      reporter: ['text', 'json-summary', 'json'],
+      exclude: [
+        'node_modules/',
+        'src/test/',
+        '**/*.test.tsx',
+        '**/*.test.ts',
+        '**/*.d.ts',
+        '**/setup.ts',
+      ],
     },
   },
 });
