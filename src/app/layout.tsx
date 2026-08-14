@@ -1,5 +1,4 @@
-import { Inter, Sora } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from "next";
 import TopBar from "@/components/layout/TopBar";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
@@ -12,7 +11,7 @@ import Industries from "@/components/sections/Industries";
 import Testimonials from "@/components/sections/Testimonials";
 import CTABand from "@/components/sections/CTABand";
 import Footer from "@/components/layout/Footer";
-import type { Metadata } from "next";
+import { Inter, Sora } from "next/font/google";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://nexrouteglobal.com"),
