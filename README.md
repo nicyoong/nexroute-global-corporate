@@ -33,7 +33,10 @@ Custom shadows: `soft`, `medium`, `large`, `accent`.
 | `/contact` | RFQ form with validation + 3 office addresses sidebar |
 | `/services` | Services index listing all 6 services |
 | `/services/[slug]` | Service detail pages (air-ocean-freight, warehousing-fulfillment, customs-brokerage, last-mile-delivery, cold-chain, consulting) |
-| `/track` | Full tracking page with widget |
+| `/network` | Global network with 4 regional hubs and throughput stats |
+| `/industries` | Industry verticals (Manufacturing, Healthcare, Retail & E-commerce, Automotive) |
+| `/insights` | Blog/articles listing with categories |
+| `/about` | Company story, leadership team, values, and CTA |
 
 ## Components
 
@@ -75,6 +78,7 @@ Custom shadows: `soft`, `medium`, `large`, `accent`.
 ## SEO
 
 - Metadata template in `layout.tsx` (title, description, Open Graph, Twitter cards)
+- `metadataBase` set for absolute URLs
 - `robots.txt` and `sitemap.xml` ready for deployment
 - Canonical URL set
 - Theme color meta tag
@@ -108,6 +112,10 @@ src/
 │   ├── track/            # Tracking page
 │   ├── contact/          # Contact / RFQ page
 │   ├── services/         # Services index + [slug] detail
+│   ├── network/          # Global network page
+│   ├── industries/       # Industries page
+│   ├── insights/         # Blog/articles page
+│   ├── about/            # About page
 │   └── globals.css       # Tailwind v4 + custom styles
 ├── components/
 │   ├── ui/               # Reusable primitives
@@ -128,6 +136,7 @@ src/
 - [x] Open Graph + Twitter card metadata
 - [x] No console errors (verified in build)
 - [x] All copy is professional B2B logistics (zero lorem ipsum)
+- [x] Build passes: 18 static routes generated
 
 ## License
 
