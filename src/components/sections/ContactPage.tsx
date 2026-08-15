@@ -14,6 +14,8 @@ type FormState = {
   origin: string;
   destination: string;
   details: string;
+  incoterms: string;
+  hsCode: string;
 };
 
 const SERVICES = [
@@ -25,6 +27,41 @@ const SERVICES = [
   "Cold Chain Logistics",
   "Supply Chain Consulting",
   "Other",
+];
+
+const INCOTERMS = [
+  {
+    code: "EXW",
+    name: "EXW - Ex Works",
+    description: "Seller makes goods available at their premises. Buyer handles all transport and customs.",
+  },
+  {
+    code: "FOB",
+    name: "FOB - Free on Board",
+    description: "Seller delivers goods on board the vessel. Buyer handles freight and insurance from port of shipment.",
+  },
+  {
+    code: "CIF",
+    name: "CIF - Cost, Insurance & Freight",
+    description: "Seller pays for cost, insurance, and freight to destination port. Risk transfers when goods load on vessel.",
+  },
+  {
+    code: "DAP",
+    name: "DAP - Delivered at Place",
+    description: "Seller delivers goods to named destination, ready for unloading. Buyer handles import customs.",
+  },
+  {
+    code: "DDP",
+    name: "DDP - Delivered Duty Paid",
+    description: "Seller handles all costs and risks including import customs and duties. Maximum seller responsibility.",
+  },
+];
+
+const HS_CODE_HELPERS = [
+  { code: "0000.00", example: "Chapter 01-24: Animal/ Veg products" },
+  { code: "6000.00", example: "Chapter 60-63: Textiles" },
+  { code: "8000.00", example: "Chapter 80-85: Electronics/Machinery" },
+  { code: "9000.00", example: "Chapter 90-99: Instruments/Arms" },
 ];
 
 const OFFICES = [
@@ -48,6 +85,12 @@ const OFFICES = [
   },
 ];
 
+function validateHSCode(code: string): string | undefined {
+  if (!code.trim()) return "HS Code is required.";
+  if (!/^\d{6,10}$/.test(code)) return "HS Code must be 6-10 numeric digits (e.g., 8517.12).";
+  return undefined;
+}
+
 export default function ContactPage() {
   const [form, setForm] = useState<FormState>({
     name: "",
@@ -57,10 +100,14 @@ export default function ContactPage() {
     origin: "",
     destination: "",
     details: "",
+    incoterms: "",
+    hsCode: "",
   });
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [showIncotermsHelp, setShowIncotermsHelp] = useState(false);
+  const [hsCodeError, setHsCodeError] = useState<string | undefined>();
 
   const validate = (): boolean => {
     const errs: Partial<Record<keyof FormState, string>> = {};
@@ -71,6 +118,9 @@ export default function ContactPage() {
     if (!form.service) errs.service = "Please select a service.";
     if (!form.origin.trim()) errs.origin = "Origin is required.";
     if (!form.destination.trim()) errs.destination = "Destination is required.";
+    if (!form.incoterms) errs.incoterms = "Please select an Incoterm.";
+    const hsError = validateHSCode(form.hsCode);
+    if (hsError) errs.hsCode = hsError;
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -82,6 +132,9 @@ export default function ContactPage() {
     setForm((prev) => ({ ...prev, [name]: value }));
     if (errors[name as keyof FormState]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+    if (name === "hsCode") {
+      setHsCodeError(validateHSCode(value));
     }
   };
 
@@ -222,6 +275,80 @@ export default function ContactPage() {
                   )}
                 </div>
                 <div>
+                  <label htmlFor="incoterms" className="block text-sm font-medium text-primary-700 mb-1">
+                    Incoterms 2020 <span className="text-red-500" aria-label="required">*</span>
+                    <button
+                      type="button"
+                      onClick={() => setShowIncotermsHelp(!showIncotermsHelp)}
+                      className="ml-2 text-accent hover:text-accent-dark text-xs font-normal underline"
+                      aria-expanded={showIncotermsHelp}
+                      aria-controls="incoterms-help"
+                    >
+                      What's this?
+                    </button>
+                  </label>
+                  <select
+                    id="incoterms"
+                    name="incoterms"
+                    value={form.incoterms}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2.5 rounded-lg border ${
+                      errors.incoterms ? "border-red-400" : "border-slate-200"
+                    } focus:border-accent focus:outline-none transition-colors bg-white`}
+                    aria-invalid={!!errors.incoterms}
+                  >
+                    <option value="">Select Incoterm…</option>
+                    {INCOTERMS.map((term) => (
+                      <option key={term.code} value={term.code}>{term.code} - {term.name.split(" - ")[1]}</option>
+                    ))}
+                  </select>
+                  {errors.incoterms && (
+                    <p className="mt-1 text-sm text-red-500" role="alert">{errors.incoterms}</p>
+                  )}
+                  {showIncotermsHelp && (
+                    <div id="incoterms-help" className="mt-3 space-y-2" role="region" aria-label="Incoterms 2020 helper">
+                      {INCOTERMS.map((term) => (
+                        <div key={term.code} className="bg-surface rounded-lg p-3 text-sm">
+                          <p className="font-semibold text-primary">{term.code} - {term.name.split(" - ")[1]}</p>
+                          <p className="text-primary-600 mt-1">{term.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label htmlFor="hsCode" className="block text-sm font-medium text-primary-700 mb-1">
+                    HS Code <span className="text-red-500" aria-label="required">*</span>
+                    <span className="ml-1 text-xs text-slate-500 font-normal">(6-10 digits)</span>
+                  </label>
+                  <input
+                    id="hsCode"
+                    name="hsCode"
+                    type="text"
+                    value={form.hsCode}
+                    onChange={handleChange}
+                    maxLength={10}
+                    placeholder="e.g., 85171200"
+                    className={`w-full px-4 py-2.5 rounded-lg border ${
+                      hsCodeError ? "border-red-400" : errors.hsCode ? "border-red-400" : "border-slate-200"
+                    } focus:border-accent focus:outline-none transition-colors`}
+                    aria-invalid={!!hsCodeError || !!errors.hsCode}
+                    aria-describedby={hsCodeError ? "hsCode-error" : "hsCode-help"}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                  />
+                  {hsCodeError && (
+                    <p id="hsCode-error" className="mt-1 text-sm text-red-500" role="alert">{hsCodeError}</p>
+                  )}
+                  {!hsCodeError && (
+                    <p id="hsCode-help" className="mt-1 text-xs text-slate-500">
+                      Harmonized System code for customs classification
+                    </p>
+                  )}
+                </div>
+                <div>
                   <label htmlFor="details" className="block text-sm font-medium text-primary-700 mb-1">
                     Cargo Details
                   </label>
@@ -316,6 +443,12 @@ export default function ContactPage() {
             <div className="bg-accent/10 rounded-xl p-5 text-sm text-primary-700">
               <p className="font-semibold text-primary mb-1">Response Time</p>
               <p>All requests are reviewed within 2 business hours during global operating hours (24/7).</p>
+            </div>
+            <div className="bg-primary rounded-xl p-5 text-sm text-surface">
+              <p className="font-semibold text-white mb-2">Trade Compliance</p>
+              <p className="text-surface/80">
+                Our customs brokerage team ensures all HS codes and Incoterms are correctly applied for smooth clearance.
+              </p>
             </div>
           </div>
         </div>

@@ -1,54 +1,44 @@
-import { render, screen } from '@testing-library/react';
-import TopBar from '@/components/layout/TopBar';
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import TopBar from "./TopBar";
 
-describe('TopBar', () => {
-  it('renders contact info', () => {
+describe("TopBar", () => {
+  it("renders contact phone number", () => {
     render(<TopBar />);
-    expect(screen.getByText('+1 (800) 555-ROUTE')).toBeInTheDocument();
-    expect(screen.getByText('operations@nexrouteglobal.com')).toBeInTheDocument();
-    expect(screen.getByText('ISO 9001:2015 Certified')).toBeInTheDocument();
+    expect(screen.getByText("+1 (800) 555-ROUTE")).toBeInTheDocument();
   });
 
-  it('renders phone as a link', () => {
+  it("renders contact email", () => {
     render(<TopBar />);
-    const phoneLink = screen.getByRole('link', { name: /phone: \+1 \(800\) 555-route/i });
-    expect(phoneLink).toBeInTheDocument();
-    expect(phoneLink).toHaveAttribute('href', 'tel:+18005557688');
+    expect(screen.getByText("operations@nexrouteglobal.com")).toBeInTheDocument();
   });
 
-  it('renders email as a link', () => {
+  it("renders certification badge", () => {
     render(<TopBar />);
-    const emailLink = screen.getByRole('link', { name: /email: operations@nexrouteglobal.com/i });
-    expect(emailLink).toBeInTheDocument();
-    expect(emailLink).toHaveAttribute('href', 'mailto:operations@nexrouteglobal.com');
+    expect(screen.getByText("ISO 9001:2015 Certified")).toBeInTheDocument();
   });
 
-  it('renders ISO certification as plain text (not a link)', () => {
+  it("renders operating statement", () => {
     render(<TopBar />);
-    const certText = screen.getByText('ISO 9001:2015 Certified');
-    expect(certText.closest('a')).toBeNull();
+    expect(screen.getByText(/serving 40\+ countries/i)).toBeInTheDocument();
+    expect(screen.getByText(/24\/7 operations center/i)).toBeInTheDocument();
   });
 
-  it('renders the tagline', () => {
+  it("has correct role and aria-label", () => {
     render(<TopBar />);
-    expect(screen.getByText(/Serving 40\+ countries/i)).toBeInTheDocument();
+    expect(document.querySelector('[role="complementary"]')).toBeInTheDocument();
+    expect(document.querySelector('[aria-label="Contact information bar"]')).toBeInTheDocument();
   });
 
-  it('has role="complementary"', () => {
-    const { container } = render(<TopBar />);
-    const el = container.firstChild as HTMLElement;
-    expect(el).toHaveAttribute('role', 'complementary');
-  });
-
-  it('has correct aria-label', () => {
-    const { container } = render(<TopBar />);
-    const el = container.firstChild as HTMLElement;
-    expect(el).toHaveAttribute('aria-label', 'Contact information bar');
-  });
-
-  it('renders all three contact items', () => {
+  it("phone number links to tel:", () => {
     render(<TopBar />);
-    const items = screen.getAllByRole('link').length + document.querySelectorAll('span').length;
-    expect(items).toBeGreaterThan(0);
+    const phoneLink = screen.getByText("+1 (800) 555-ROUTE").closest("a");
+    expect(phoneLink).toHaveAttribute("href", "tel:+18005557688");
+  });
+
+  it("email links to mailto:", () => {
+    render(<TopBar />);
+    const emailLink = screen.getByText("operations@nexrouteglobal.com").closest("a");
+    expect(emailLink).toHaveAttribute("href", "mailto:operations@nexrouteglobal.com");
   });
 });

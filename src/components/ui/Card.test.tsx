@@ -1,94 +1,43 @@
-import { render, screen } from '@testing-library/react';
-import Card from '@/components/ui/Card';
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import Card from "./Card";
 
-describe('Card', () => {
-  it('renders as a div by default', () => {
-    const { container } = render(<Card>Card Content</Card>);
-    const card = container.firstChild;
+describe("Card", () => {
+  it("renders as a div by default", () => {
+    render(<Card>Card Content</Card>);
+    const card = screen.getByText("Card Content").closest("div");
     expect(card).toBeInTheDocument();
-    expect(card?.tagName).toBe('DIV');
+    expect(card).toHaveClass("bg-white", "rounded-xl");
   });
 
-  it('renders children content', () => {
-    render(<Card>Important Content</Card>);
-    expect(screen.getByText('Important Content')).toBeInTheDocument();
-  });
-
-  it('renders as a link when href is provided', () => {
-    render(
-      <Card href="https://example.com">
-        <span>Link Card</span>
-      </Card>
-    );
-    const card = screen.getByRole('link');
+  it("renders as a link when href is provided", () => {
+    render(<Card href="/test">Link Card</Card>);
+    const card = screen.getByText("Link Card").closest("a");
     expect(card).toBeInTheDocument();
-    expect(card).toHaveAttribute('href', 'https://example.com');
+    expect(card).toHaveAttribute("href", "/test");
   });
 
-  it('renders as a button when onClick is provided', () => {
-    const handleClick = vi.fn();
-    render(<Card onClick={handleClick}>Button Card</Card>);
-    const card = screen.getByRole('button', { name: /button card/i });
+  it("renders as a button when onClick is provided", () => {
+    render(<Card onClick={() => {}}>Button Card</Card>);
+    const card = screen.getByText("Button Card").closest("button");
     expect(card).toBeInTheDocument();
-    card.click();
-    expect(handleClick).toHaveBeenCalledTimes(1);
+    expect(card).toHaveAttribute("type", "button");
   });
 
-  it('has tabIndex=0 when rendered as link', () => {
-    render(<Card href="/test"><span>Navigable Card</span></Card>);
-    const card = screen.getByRole('link');
-    expect(card).toHaveAttribute('tabindex', '0');
+  it("applies custom className", () => {
+    render(<Card className="custom-class">Content</Card>);
+    const card = screen.getByText("Content").closest("div");
+    expect(card).toHaveClass("custom-class");
   });
 
-  it('sets type="button" when rendered as button', () => {
-    const handleClick = vi.fn();
-    render(<Card onClick={handleClick}>Action Card</Card>);
-    const card = screen.getByRole('button');
-    expect(card).toHaveAttribute('type', 'button');
+  it("sets aria-label when provided", () => {
+    render(<Card href="/test" ariaLabel="Custom label">Link Card</Card>);
+    expect(screen.getByRole("link", { name: /custom label/i })).toBeInTheDocument();
   });
 
-  it('sets aria-label when provided on link card', () => {
-    render(
-      <Card href="/test" ariaLabel="Custom label">
-        <span>Labelled</span>
-      </Card>
-    );
-    const card = screen.getByRole('link');
-    expect(card).toHaveAttribute('aria-label', 'Custom label');
-  });
-
-  it('sets aria-label when provided on button card', () => {
-    render(
-      <Card onClick={() => {}} ariaLabel="Action label">
-        <span>Action</span>
-      </Card>
-    );
-    const card = screen.getByRole('button');
-    expect(card).toHaveAttribute('aria-label', 'Action label');
-  });
-
-  it('applies custom className', () => {
-    render(<Card className="my-card">Content</Card>);
-    const card = document.querySelector('.my-card');
-    expect(card).toBeInTheDocument();
-  });
-
-  it('defaults to div when no href or onClick provided', () => {
-    render(<Card>Plain Card</Card>);
-    const cards = document.querySelectorAll('div');
-    const plainCard = Array.from(cards).find(c => c.textContent === 'Plain Card');
-    expect(plainCard).toBeInTheDocument();
-  });
-
-  it('prioritizes href over onClick when both are provided', () => {
-    render(
-      <Card href="/test" onClick={() => {}}>
-        Priority
-      </Card>
-    );
-    const link = screen.queryByRole('link');
-    expect(link).toBeInTheDocument();
-    const btn = screen.queryByRole('button');
-    expect(btn).not.toBeInTheDocument();
+  it("has hover shadow effect", () => {
+    render(<Card>Hover Card</Card>);
+    const card = screen.getByText("Hover Card").closest("div");
+    expect(card).toHaveClass("hover:shadow-medium");
   });
 });

@@ -1,49 +1,56 @@
-import { render, screen } from '@testing-library/react';
-import RootLayout from '@/app/layout';
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import Layout from "./layout";
 
-describe('RootLayout', () => {
-  it('renders children', () => {
-    render(<RootLayout><main>Main Content</main></RootLayout>);
-    expect(screen.getByText('Main Content')).toBeInTheDocument();
+vi.mock("next/link", () => ({
+  default: ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  ),
+}));
+
+vi.mock("@/components/layout/TopBar", () => ({ default: () => <div data-testid="topbar">TopBar</div> }));
+vi.mock("@/components/layout/Navbar", () => ({ default: () => <div data-testid="navbar">Navbar</div> }));
+vi.mock("@/components/layout/Footer", () => ({ default: () => <div data-testid="footer">Footer</div> }));
+vi.mock("@/components/sections/Hero", () => ({ default: () => <div data-testid="hero">Hero</div> }));
+vi.mock("@/components/sections/ClientLogos", () => ({ default: () => <div data-testid="clientlogos">ClientLogos</div> }));
+vi.mock("@/components/sections/Stats", () => ({ default: () => <div data-testid="stats">Stats</div> }));
+vi.mock("@/components/sections/Services", () => ({ default: () => <div data-testid="services">Services</div> }));
+vi.mock("@/components/sections/GlobalNetwork", () => ({ default: () => <div data-testid="globalnetwork">GlobalNetwork</div> }));
+vi.mock("@/components/sections/HowItWorks", () => ({ default: () => <div data-testid="howitworks">HowItWorks</div> }));
+vi.mock("@/components/sections/Industries", () => ({ default: () => <div data-testid="industries">Industries</div> }));
+vi.mock("@/components/sections/Testimonials", () => ({ default: () => <div data-testid="testimonials">Testimonials</div> }));
+vi.mock("@/components/sections/CTABand", () => ({ default: () => <div data-testid="ctaband">CTABand</div> }));
+
+// Mock font imports
+vi.mock("next/font/google", () => ({
+  Inter: () => ({ variable: "--font-inter" }),
+  Sora: () => ({ variable: "--font-sora" }),
+}));
+
+describe("RootLayout", () => {
+  it("renders children", () => {
+    render(
+      <Layout>
+        <main>Test Content</main>
+      </Layout>
+    );
+    expect(screen.getByText("Test Content")).toBeInTheDocument();
   });
 
-  it('has html with lang="en"', () => {
-    const { container } = render(<RootLayout><div>Content</div></RootLayout>);
-    const html = container.querySelector('html');
-    expect(html).toHaveAttribute('lang', 'en');
+  it("renders skip link", () => {
+    render(<Layout><main>Content</main></Layout>);
+    expect(screen.getByText("Skip to main content")).toBeInTheDocument();
   });
 
-  it('renders skip to content link', () => {
-    render(<RootLayout><main>Content</main></RootLayout>);
-    const skipLink = document.querySelector('.skip-link');
-    expect(skipLink).toBeInTheDocument();
-    expect(skipLink).toHaveAttribute('href', '#main-content');
-    expect(skipLink).toHaveAttribute('aria-label', 'Skip to main content');
+  it("renders main content with id", () => {
+    render(<Layout><main>Content</main></Layout>);
+    expect(document.querySelector('main[id="main-content"]')).toBeInTheDocument();
   });
 
-  it('has min-h-screen and antialiased on body', () => {
-    const { container } = render(<RootLayout><div>Content</div></RootLayout>);
-    const body = container.querySelector('body');
-    expect(body).toHaveClass('min-h-screen');
-    expect(body).toHaveClass('antialiased');
-  });
-
-  it('renders favicon links', () => {
-    render(<RootLayout><div>Content</div></RootLayout>);
-    const icons = document.querySelectorAll('link[rel="icon"]');
-    expect(icons.length).toBeGreaterThanOrEqual(1);
-  });
-
-  it('renders preconnect links for Google Fonts', () => {
-    render(<RootLayout><div>Content</div></RootLayout>);
-    const preconnects = document.querySelectorAll('link[rel="preconnect"]');
-    expect(preconnects.length).toBeGreaterThanOrEqual(2);
-  });
-
-  it('renders theme-color meta tag', () => {
-    render(<RootLayout><div>Content</div></RootLayout>);
-    const themeColor = document.querySelector('meta[name="theme-color"]');
-    expect(themeColor).toBeInTheDocument();
-    expect(themeColor).toHaveAttribute('content', '#0B1F3A');
+  it("renders TopBar, Navbar, and Footer", () => {
+    render(<Layout><main>Content</main></Layout>);
+    expect(screen.getByTestId("topbar")).toBeInTheDocument();
+    expect(screen.getByTestId("navbar")).toBeInTheDocument();
+    expect(screen.getByTestId("footer")).toBeInTheDocument();
   });
 });

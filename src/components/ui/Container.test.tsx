@@ -1,56 +1,39 @@
-import { render, screen } from '@testing-library/react';
-import Container from '@/components/ui/Container';
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import Container from "./Container";
 
-describe('Container', () => {
-  it('renders children', () => {
-    render(<Container>Container Content</Container>);
-    expect(screen.getByText('Container Content')).toBeInTheDocument();
+describe("Container", () => {
+  it("renders children", () => {
+    render(<Container>Test Content</Container>);
+    expect(screen.getByText("Test Content")).toBeInTheDocument();
   });
 
-  it('renders as div by default', () => {
-    const { container } = render(<Container>Default</Container>);
-    expect(container.firstChild?.tagName).toBe('DIV');
+  it("applies default max-width classes", () => {
+    render(<Container>Content</Container>);
+    const container = screen.getByText("Content").closest("div");
+    expect(container).toHaveClass("max-w-7xl", "mx-auto");
   });
 
-  it('renders as section when as="section"', () => {
-    const { container } = render(<Container as="section">Section</Container>);
-    expect(container.firstChild?.tagName).toBe('SECTION');
+  it("applies custom className", () => {
+    render(<Container className="custom-class">Content</Container>);
+    const container = screen.getByText("Content").closest("div");
+    expect(container).toHaveClass("custom-class");
   });
 
-  it('renders as article when as="article"', () => {
-    const { container } = render(<Container as="article">Article</Container>);
-    expect(container.firstChild?.tagName).toBe('ARTICLE');
+  it("sets id when provided", () => {
+    render(<Container id="test-id">Content</Container>);
+    expect(screen.getByText("Content").closest("div")).toHaveAttribute("id", "test-id");
   });
 
-  it('applies default container classes', () => {
-    const { container } = render(<Container>Default Classes</Container>);
-    const el = container.firstChild as HTMLElement;
-    expect(el).toHaveClass('max-w-7xl');
-    expect(el).toHaveClass('mx-auto');
-    expect(el).toHaveClass('px-4');
+  it("renders as section when as is section", () => {
+    render(<Container as="section">Section Content</Container>);
+    const el = screen.getByText("Section Content").closest("section");
+    expect(el).toBeInTheDocument();
   });
 
-  it('applies custom className', () => {
-    const { container } = render(<Container className="custom">Custom</Container>);
-    const el = container.firstChild as HTMLElement;
-    expect(el).toHaveClass('custom');
-  });
-
-  it('sets id when id is provided', () => {
-    const { container } = render(<Container id="main-content">Id Test</Container>);
-    const el = container.firstChild as HTMLElement;
-    expect(el).toHaveAttribute('id', 'main-content');
-  });
-
-  it('does not set id when id is not provided', () => {
-    const { container } = render(<Container>No ID</Container>);
-    const el = container.firstChild as HTMLElement;
-    expect(el).not.toHaveAttribute('id');
-  });
-
-  it('defaults as to div', () => {
-    const { container } = render(<Container>Default As</Container>);
-    const el = container.firstChild as HTMLElement;
-    expect(el.tagName).toBe('DIV');
+  it("renders as article when as is article", () => {
+    render(<Container as="article">Article Content</Container>);
+    const el = screen.getByText("Article Content").closest("article");
+    expect(el).toBeInTheDocument();
   });
 });

@@ -6,9 +6,7 @@
 
 # testing
 /coverage
-/test-output.txt
-/coverage-output.txt
-/coverage-run.txt
+/.coverage
 
 # next.js
 /.next/
@@ -32,3 +30,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# temp files
+*.txt
+*.py
+*.log
+
+cache

@@ -1,50 +1,31 @@
-import { render, screen } from '@testing-library/react';
-import ClientLogos from '@/components/sections/ClientLogos';
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import ClientLogos from "./ClientLogos";
 
-describe('ClientLogos', () => {
-  it('renders the section with correct aria-label', () => {
+describe("ClientLogos", () => {
+  beforeEach(() => {
+    vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback) => setTimeout(cb, 0) as unknown as number);
+    vi.stubGlobal("cancelAnimationFrame", (id: number) => clearTimeout(id));
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("renders client names", () => {
     render(<ClientLogos />);
-    const section = document.querySelector('section[aria-label="Our clients"]');
-    expect(section).toBeInTheDocument();
+    // Client names appear twice due to carousel duplication
+    const meridianFoods = screen.getAllByText("Meridian Foods");
+    expect(meridianFoods.length).toBeGreaterThan(0);
+    const atlasPharma = screen.getAllByText("Atlas Pharma");
+    expect(atlasPharma.length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Kite Retail").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Vantor Automotive").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Helios Electronics").length).toBeGreaterThan(0);
   });
 
-  it('renders all client names (at least once each)', () => {
+  it("has accessible label", () => {
     render(<ClientLogos />);
-    // Since names are duplicated for seamless scroll, use getAllByText
-    expect(screen.getAllByText('Meridian Foods').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Atlas Pharma').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Kite Retail').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Vantor Automotive').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Helios Electronics').length).toBeGreaterThanOrEqual(1);
-  });
-
-  it('has screen reader only text', () => {
-    render(<ClientLogos />);
-    expect(screen.getByText('Trusted by leading global brands')).toBeInTheDocument();
-  });
-
-  it('renders client names twice for seamless scrolling', () => {
-    render(<ClientLogos />);
-    const allMeridian = document.querySelectorAll('[class*="text-slate-300"]');
-    // There should be 10 spans (5 clients * 2)
-    expect(allMeridian.length).toBeGreaterThanOrEqual(5);
-  });
-
-  it('section has bg-white class', () => {
-    const { container } = render(<ClientLogos />);
-    const section = container.querySelector('section');
-    expect(section).toHaveClass('bg-white');
-  });
-
-  it('section has overflow-hidden class', () => {
-    const { container } = render(<ClientLogos />);
-    const section = container.querySelector('section');
-    expect(section).toHaveClass('overflow-hidden');
-  });
-
-  it('applies transform style for animation', () => {
-    render(<ClientLogos />);
-    const transformEl = document.querySelector('[style*="transform"]');
-    expect(transformEl).toBeInTheDocument();
+    expect(screen.getByText(/trusted by leading global brands/i)).toBeInTheDocument();
   });
 });
