@@ -1,20 +1,36 @@
-import { render, screen } from '@testing-library/react';
-import InsightsPage from '@/app/insights/page';
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import InsightsPage from "./page";
 
-describe('InsightsPage', () => {
-  it('renders the page heading', () => {
+vi.mock("next/link", () => ({
+  default: ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  ),
+}));
+
+describe("InsightsPage", () => {
+  it("renders page heading", () => {
     render(<InsightsPage />);
-    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+    expect(screen.getByText("Insights & Resources")).toBeInTheDocument();
   });
 
-  it('renders page content', () => {
+  it("renders article cards", () => {
     render(<InsightsPage />);
-    expect(document.body.children.length).toBeGreaterThan(0);
+    expect(screen.getByText(/navigating post-brexit trade/i)).toBeInTheDocument();
+    expect(screen.getByText(/cold chain excellence/i)).toBeInTheDocument();
+    expect(screen.getByText(/the future of last-mile/i)).toBeInTheDocument();
   });
 
-  it('renders main content', () => {
+  it("renders category filters", () => {
     render(<InsightsPage />);
-    const main = document.querySelector('main');
-    expect(main).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: /filter by category/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /all/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /trade compliance/i })).toBeInTheDocument();
+  });
+
+  it("renders breadcrumb", () => {
+    render(<InsightsPage />);
+    expect(screen.getByText("Home")).toBeInTheDocument();
+    expect(screen.getByText("Insights")).toBeInTheDocument();
   });
 });

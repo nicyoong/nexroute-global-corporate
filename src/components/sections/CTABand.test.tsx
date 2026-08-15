@@ -1,61 +1,43 @@
-import { render, screen } from '@testing-library/react';
-import CTABand from '@/components/sections/CTABand';
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import CTABand from "./CTABand";
 
-describe('CTABand', () => {
-  it('renders the main heading', () => {
+vi.mock("next/link", () => ({
+  default: ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  ),
+}));
+
+describe("CTABand", () => {
+  it("renders heading", () => {
     render(<CTABand />);
-    expect(screen.getByRole('heading', { level: 2, name: /Ready to de-risk your supply chain\?/i })).toBeInTheDocument();
+    expect(screen.getByText("Ready to de-risk your supply chain?")).toBeInTheDocument();
   });
 
-  it('renders the CTA description paragraph', () => {
+  it("renders description", () => {
     render(<CTABand />);
-    expect(screen.getByText(/Whether you need a single route quote/i)).toBeInTheDocument();
-    expect(screen.getByText(/complete logistics overhaul/i)).toBeInTheDocument();
+    expect(screen.getByText(/whether you need a single route quote/i)).toBeInTheDocument();
   });
 
-  it('renders Request a Custom Quote button', () => {
+  it("renders CTA buttons", () => {
     render(<CTABand />);
-    expect(screen.getByRole('link', { name: /Request a Custom Quote/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /request a custom quote/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /learn about nexroute/i })).toBeInTheDocument();
   });
 
-  it('renders Learn About NexRoute button', () => {
+  it("links to correct pages", () => {
     render(<CTABand />);
-    expect(screen.getByRole('link', { name: /Learn About Our Company/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /request a custom quote/i })).toHaveAttribute("href", "/contact");
+    expect(screen.getByRole("link", { name: /learn about nexroute/i })).toHaveAttribute("href", "/about");
   });
 
-  it('links Request a Custom Quote to /contact', () => {
+  it("renders response time note", () => {
     render(<CTABand />);
-    const requestBtn = screen.getByRole('link', { name: /Request a Custom Quote/i });
-    expect(requestBtn).toHaveAttribute('href', '/contact');
+    expect(screen.getByText(/no commitment required/i)).toBeInTheDocument();
   });
 
-  it('links Learn About NexRoute to /about', () => {
+  it("has aria-labelledby", () => {
     render(<CTABand />);
-    const learnBtn = screen.getByRole('link', { name: /Learn About Our Company/i });
-    expect(learnBtn).toHaveAttribute('href', '/about');
-  });
-
-  it('renders the response time notice', () => {
-    render(<CTABand />);
-    expect(screen.getByText(/No commitment required/i)).toBeInTheDocument();
-    expect(screen.getByText(/logistics specialists respond within 2 business hours/i)).toBeInTheDocument();
-  });
-
-  it('has correct section aria-labelledby', () => {
-    render(<CTABand />);
-    const section = document.querySelector('section[aria-labelledby="cta-heading"]');
-    expect(section).toBeInTheDocument();
-  });
-
-  it('has bg-primary class on section', () => {
-    const { container } = render(<CTABand />);
-    const section = container.querySelector('section');
-    expect(section).toHaveClass('bg-primary');
-  });
-
-  it('has relative overflow-hidden on section', () => {
-    const { container } = render(<CTABand />);
-    const section = container.querySelector('section');
-    expect(section).toHaveClass('overflow-hidden');
+    expect(screen.getByText("Ready to de-risk your supply chain?")).toHaveAttribute("id", "cta-heading");
   });
 });

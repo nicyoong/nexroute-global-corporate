@@ -1,20 +1,46 @@
-import { render, screen } from '@testing-library/react';
-import NetworkPage from '@/app/network/page';
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import NetworkPage from "./page";
 
-describe('NetworkPage', () => {
-  it('renders the page heading', () => {
+vi.mock("next/link", () => ({
+  default: ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  ),
+}));
+
+describe("NetworkPage", () => {
+  it("renders page heading", () => {
     render(<NetworkPage />);
-    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+    expect(screen.getByText("Our Global Network")).toBeInTheDocument();
   });
 
-  it('renders page content', () => {
+  it("renders hub cards", () => {
     render(<NetworkPage />);
-    expect(document.body.children.length).toBeGreaterThan(0);
+    expect(screen.getByText("North America")).toBeInTheDocument();
+    expect(screen.getByText("Europe")).toBeInTheDocument();
+    expect(screen.getByText("Asia Pacific")).toBeInTheDocument();
+    expect(screen.getByText("Middle East")).toBeInTheDocument();
   });
 
-  it('renders main content', () => {
+  it("renders hub cities", () => {
     render(<NetworkPage />);
-    const main = document.querySelector('main');
-    expect(main).toBeInTheDocument();
+    expect(screen.getByText("Los Angeles, CA")).toBeInTheDocument();
+    expect(screen.getByText("Rotterdam, Netherlands")).toBeInTheDocument();
+    expect(screen.getByText("Singapore")).toBeInTheDocument();
+    expect(screen.getByText("Jebel Ali, UAE")).toBeInTheDocument();
+  });
+
+  it("renders coverage stats", () => {
+    render(<NetworkPage />);
+    expect(screen.getByText("40+")).toBeInTheDocument();
+    expect(screen.getByText("4")).toBeInTheDocument();
+    expect(screen.getByText("150+")).toBeInTheDocument();
+    expect(screen.getByText("2,500+")).toBeInTheDocument();
+  });
+
+  it("renders breadcrumb", () => {
+    render(<NetworkPage />);
+    expect(screen.getByText("Home")).toBeInTheDocument();
+    expect(screen.getByText("Network")).toBeInTheDocument();
   });
 });

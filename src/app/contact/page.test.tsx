@@ -1,9 +1,22 @@
-import { render, screen } from '@testing-library/react';
-import ContactPageApp from '@/app/contact/page';
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import ContactPageRoute from "./page";
 
-describe('ContactPage', () => {
-  it('renders the page', () => {
-    render(<ContactPageApp />);
-    expect(document.body.children.length).toBeGreaterThan(0);
+vi.mock("next/link", () => ({
+  default: ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  ),
+}));
+
+describe("ContactPageRoute", () => {
+  it("renders the contact page component", () => {
+    render(<ContactPageRoute />);
+    expect(screen.getByText(/request a quote/i)).toBeInTheDocument();
+  });
+
+  it("renders contact form fields", () => {
+    render(<ContactPageRoute />);
+    expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
   });
 });

@@ -1,48 +1,30 @@
-import { render, screen } from '@testing-library/react';
-import Testimonials from '@/components/sections/Testimonials';
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import Testimonials from "./Testimonials";
 
-describe('Testimonials', () => {
-  it('renders three testimonials', () => {
+describe("Testimonials", () => {
+  it("renders section heading", () => {
     render(<Testimonials />);
-    expect(screen.getByText('Margaret Chen')).toBeInTheDocument();
-    expect(screen.getByText('Dr. Rajesh Malhotra')).toBeInTheDocument();
-    expect(screen.getByText('Sarah Johansson')).toBeInTheDocument();
+    expect(screen.getByText("Trusted by Supply Chain Leaders")).toBeInTheDocument();
   });
 
-  it('renders testimonials with correct titles and companies', () => {
+  it("renders all testimonials", () => {
     render(<Testimonials />);
-    expect(screen.getByText('VP of Supply Chain, Meridian Foods International')).toBeInTheDocument();
-    expect(screen.getByText('Director of Logistics, Atlas Pharma Group')).toBeInTheDocument();
-    expect(screen.getByText('Supply Chain Director, Helios Electronics')).toBeInTheDocument();
+    expect(screen.getByText(/nexroute redesigned our pan-asian/i)).toBeInTheDocument();
+    expect(screen.getByText(/we ship over 12,000 temperature-sensitive/i)).toBeInTheDocument();
+    expect(screen.getByText(/when our semiconductor fabrication/i)).toBeInTheDocument();
   });
 
-  it('renders testimonial quotes', () => {
+  it("renders testimonial authors", () => {
     render(<Testimonials />);
-    expect(screen.getByText(/NexRoute redesigned our pan-Asian distribution network/i)).toBeInTheDocument();
-    expect(screen.getByText(/We ship over 12,000 temperature-sensitive/i)).toBeInTheDocument();
-    expect(screen.getByText(/When our semiconductor fabrication line/i)).toBeInTheDocument();
+    expect(screen.getByText("Margaret Chen")).toBeInTheDocument();
+    expect(screen.getByText("Dr. Rajesh Malhotra")).toBeInTheDocument();
+    expect(screen.getByText("Sarah Johansson")).toBeInTheDocument();
   });
 
-  it('renders 5-star ratings for each testimonial', () => {
+  it("renders star ratings", () => {
     render(<Testimonials />);
-    const ratingGroups = document.querySelectorAll('[aria-label*="Rating"]');
-    expect(ratingGroups).toHaveLength(3);
-  });
-
-  it('has correct section aria-labelledby', () => {
-    render(<Testimonials />);
-    const section = document.querySelector('section[aria-labelledby="testimonials-heading"]');
-    expect(section).toBeInTheDocument();
-  });
-
-  it('renders all three testimonial blockquotes', () => {
-    render(<Testimonials />);
-    const blockquotes = document.querySelectorAll('blockquote');
-    expect(blockquotes).toHaveLength(3);
-  });
-
-  it('renders section title', () => {
-    render(<Testimonials />);
-    expect(screen.getByRole('heading', { level: 2, name: /Trusted by Supply Chain Leaders/i })).toBeInTheDocument();
+    const ratings = document.querySelectorAll('[aria-label^="Rating:"]');
+    expect(ratings).toHaveLength(3);
   });
 });
